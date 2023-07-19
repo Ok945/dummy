@@ -23,7 +23,7 @@ app.get("/", cors(), (req, res) => {
 
 
 
-app.post("/", async (req, res) => {
+app.post("/dummy", async (req, res) => {
   const { email, password } = req.body;
 
   try {
