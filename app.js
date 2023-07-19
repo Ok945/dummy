@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin:"http://localhost:3000"
+  origin:["http://localhost:3000","https://ok945.github.io/dummy"]
 }));
 
 // app.use(cors());
