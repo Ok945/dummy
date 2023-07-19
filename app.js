@@ -15,7 +15,7 @@ app.use(cors({
 
 
 
-app.get("/", cors(), (req, res) => {
+app.get("/dummy", cors(), (req, res) => {
 
 
 })
