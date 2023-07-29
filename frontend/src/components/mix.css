@@ -30,7 +30,6 @@ section .form_data{
     color: #718096;
     font-size: 15px;
     margin-top:9px;
-    text-align: center;
 }
 
 .form_data form{
@@ -116,6 +115,6 @@ form .btn:hover{
 
 .form_data form a{
     text-decoration: none;
-    color:#3777d8 ;
+    color:#718096 ;
     border-bottom: 2px solid #8694a8;
 }

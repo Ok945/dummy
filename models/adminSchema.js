@@ -1,40 +1,36 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const keysecret = process.env.SECRET_KEY
 
 
-const keysecrect = "jG9#2lP$R@6iFb3s0XmU%5AqYv8^EhN!"
 
-const userSchema = new mongoose.Schema({
-
+const adminSchema = new mongoose.Schema({
     fname: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
     },
     email: {
         type: String,
         required: true,
-        trim: true,
         unique: true,
-        validator(value) {
+        validate(value) {
             if (!validator.isEmail(value)) {
                 throw new Error("not valid email")
             }
         }
-
     },
     password: {
         type: String,
         required: true,
-        trim: true,
-        minlength: 6,
-
+        minlength: 6
     },
     cpassword: {
         type: String,
         required: true,
-        trim: true,
         minlength: 6
     },
     tokens: [
@@ -45,10 +41,26 @@ const userSchema = new mongoose.Schema({
             }
         }
     ]
-
 });
 
-userSchema.methods.generateAuthtoken = async function () {
+
+
+
+
+// hash password
+
+adminSchema.pre("save", async function (next) {
+
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 12);
+        this.cpassword = await bcrypt.hash(this.cpassword, 12);
+    }
+    next()
+});
+
+
+// token generate
+adminSchema.methods.generateAuthtoken = async function () {
     try {
         let token23 = jwt.sign({ _id: this._id }, keysecret, {
             expiresIn: "1d"
@@ -62,6 +74,11 @@ userSchema.methods.generateAuthtoken = async function () {
     }
 }
 
-const userdb = new mongoose.model("users", userSchema);
-module.exports = userdb;
 
+// createing model
+const admindb = new mongoose.model("admins", adminSchema);
+
+module.exports = admindb;
+
+
+// if (this.isModified("password")) {    }

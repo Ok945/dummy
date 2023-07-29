@@ -1,25 +1,24 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./mix.css"
 
-const Login = () => {
-
+const Register = () => {
 
     const [passShow, setPassShow] = useState(false);
-    const [cpassShow, setCpassShow] = useState(false);
+    const [cpassShow, setCPassShow] = useState(false);
 
     const [inpval, setInpval] = useState({
         fname: "",
         email: "",
         password: "",
         cpassword: ""
-
-    })
+    });
 
 
     const setVal = (e) => {
         // console.log(e.target.value);
-
         const { name, value } = e.target;
 
         setInpval(() => {
@@ -27,54 +26,71 @@ const Login = () => {
                 ...inpval,
                 [name]: value
             }
-
         })
-
     };
 
-
-    const addUserData = async(e) => {
+    const addUserdata = async (e) => {
         e.preventDefault();
+
         const { fname, email, password, cpassword } = inpval;
 
         if (fname === "") {
-            alert("Please enter Your Name")
+            toast.warning("fname is required!", {
+                position: "top-center"
+            });
         } else if (email === "") {
-            alert("Please enter Your Email");
+            toast.error("email is required!", {
+                position: "top-center"
+            });
         } else if (!email.includes("@")) {
-            alert("Enter Valid Email")
+            toast.warning("includes @ in your email!", {
+                position: "top-center"
+            });
+        } else if (password === "") {
+            toast.error("password is required!", {
+                position: "top-center"
+            });
         } else if (password.length < 6) {
-            alert("Password must be of min 6 char")
+            toast.error("password must be 6 char!", {
+                position: "top-center"
+            });
+        } else if (cpassword === "") {
+            toast.error("cpassword is required!", {
+                position: "top-center"
+            });
+        }
+        else if (cpassword.length < 6) {
+            toast.error("confirm password must be 6 char!", {
+                position: "top-center"
+            });
         } else if (password !== cpassword) {
-            alert("Passwoed and Confirm Password Should be same ")
+            toast.error("pass and Cpass are not matching!", {
+                position: "top-center"
+            });
         } else {
-            // alert("Sign up successful")
+            // console.log("user registration succesfully done");
 
 
-            const data = await fetch("/register",{
-            
-                method:"POST",
-                headers:{
-                "Content-Type":"application/json"
+            const data = await fetch("/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                body:JSON.stringify({
+                body: JSON.stringify({
                     fname, email, password, cpassword
                 })
-            
             });
 
             const res = await data.json();
-            // console.log(res);
+            // console.log(res.status);
+
             if (res.status === 201) {
-                alert("User registration done!")
-                setInpval({ ...inpval,fname:"", email: "", password: "" ,cpassword: "" });
-            }
-            if(res.status === 422){
-                alert("User already exists")
+                toast.success("Registration Successfully done 😃!", {
+                    position: "top-center"
+                });
+                setInpval({ ...inpval, fname: "", email: "", password: "", cpassword: "" });
             }
         }
-
-
     }
 
     return (
@@ -82,15 +98,15 @@ const Login = () => {
             <section>
                 <div className="form_data">
                     <div className="form_heading">
-                        <h1>Sign up</h1>
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Offi  Dolor totam <br />assumenda nobis doloribus quasi facilis eum.</p>
+                        <h1>Sign Up</h1>
+                        <p style={{ textAlign: "center" }}>We are glad that you will be using Project Cloud to manage <br />
+                            your tasks! We hope that you will get like it.</p>
                     </div>
 
-                    <form >
-
+                    <form>
                         <div className="form_input">
-                            <label htmlFor="text">Name</label>
-                            <input type="text" onChange={setVal} value={inpval.fname} name="fname" id="name" placeholder='Enter Your Name' />
+                            <label htmlFor="fname">Name</label>
+                            <input type="text" onChange={setVal} value={inpval.fname} name="fname" id="fname" placeholder='Enter Your Name' />
                         </div>
                         <div className="form_input">
                             <label htmlFor="email">Email</label>
@@ -98,35 +114,32 @@ const Login = () => {
                         </div>
                         <div className="form_input">
                             <label htmlFor="password">Password</label>
-
                             <div className="two">
-
-                                <input type={!passShow ? "password" : "text"} value={inpval.password} onChange={setVal} name="password" id="password" placeholder='Enter Your Password' />
+                                <input type={!passShow ? "password" : "text"} value={inpval.password} onChange={setVal} name="password" id="password" placeholder='Enter Your password' />
                                 <div className="showpass" onClick={() => setPassShow(!passShow)}>
                                     {!passShow ? "Show" : "Hide"}
                                 </div>
                             </div>
                         </div>
+
                         <div className="form_input">
                             <label htmlFor="password">Confirm Password</label>
-
                             <div className="two">
-
-                                <input type={!cpassShow ? "password" : "text"} onChange={setVal} value={inpval.cpassword} name="cpassword" id="cpassword" placeholder='Cofirm Password' />
-                                <div className="showpass" onClick={() => setCpassShow(!cpassShow)}>
+                                <input type={!cpassShow ? "password" : "text"} value={inpval.cpassword} onChange={setVal} name="cpassword" id="cpassword" placeholder='Confirm password' />
+                                <div className="showpass" onClick={() => setCPassShow(!cpassShow)}>
                                     {!cpassShow ? "Show" : "Hide"}
                                 </div>
                             </div>
                         </div>
 
-
-                        <button className='btn' onClick={addUserData}>Sign Up</button>
-                        <p>Already have an Account? <NavLink to="/">Login Up</NavLink>  </p>
+                        <button className='btn' onClick={addUserdata}>Sign Up</button>
+                        <p>Already have an account? <NavLink to="/">Log In</NavLink></p>
                     </form>
+                    <ToastContainer />
                 </div>
             </section>
         </>
     )
 }
 
-export default Login
+export default Register
