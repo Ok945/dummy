@@ -36,22 +36,22 @@ const userSchema = new mongoose.Schema({
         minlength: 6
     },
     mis:{
-        type:integer,
-        minlength:9
+        type:Number,
+        min:100000000
     },
     mobileno:{
-        type:integer,
+        type:String,
         minlength:10
     },
     nback:{
-        type:integer,
+        type:Number,
     },
     profilephoto: {
         type: String,
         require: true,
     },
     cgpa:{
-        type:Float32Array,
+        type:Number,
     },
     dob:{
         type:String,

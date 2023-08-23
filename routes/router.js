@@ -1,33 +1,12 @@
 const express = require("express");
-const router = new express.Router(); 
+const router = new express.Router();
 const userdb = require("../models/userSchema");
-// const admindb = require("../models/adminSchema")
 var bcrypt = require("bcryptjs");
 const authenticate = require("../middleware/authenticate");
-const { urlencoded } = require("body-parser");
-
-
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
-
-const connection = require("./db/conn");
-
-
-Grid.mongo = mongoose.mongo;
-const gfs = Grid(connection.db);
-
-// Create GridFS storage engine
-const storage = new GridFsStorage({
-  gfs,
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  },
-  // Additional options if needed
-});
 
 
 
-const upload = multer({ storage });
+
 
 
 
