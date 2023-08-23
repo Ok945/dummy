@@ -13,7 +13,6 @@ const Form1 = ({ onGetData }) => {
     const [inputValues, setInputValues] = useState({
         fname: "",
         lname: "",
-
     })
 
 

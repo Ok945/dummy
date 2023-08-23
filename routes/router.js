@@ -1,5 +1,5 @@
 const express = require("express");
-const router = new express.Router();
+const router = new express.Router(); 
 const userdb = require("../models/userSchema");
 // const admindb = require("../models/adminSchema")
 var bcrypt = require("bcryptjs");
@@ -7,12 +7,42 @@ const authenticate = require("../middleware/authenticate");
 const { urlencoded } = require("body-parser");
 
 
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+
+const connection = require("./db/conn");
+
+
+Grid.mongo = mongoose.mongo;
+const gfs = Grid(connection.db);
+
+// Create GridFS storage engine
+const storage = new GridFsStorage({
+  gfs,
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+  // Additional options if needed
+});
+
+
+
+const upload = multer({ storage });
+
+
+
+
+
+
+
+
 // for user registration
 
 router.post("/register", async (req, res) => {
 
     const { fname, email, password, cpassword } = req.body;
-    const profilephoto =""
+    // const profilephoto ="";
+    // const resume ="";
 
     if (!fname || !email || !password || !cpassword) {
         res.status(422).json({ error: "fill all the details" })
@@ -28,7 +58,7 @@ router.post("/register", async (req, res) => {
             res.status(422).json({ error: "Password and Confirm Password Not Match" })
         } else {
             const finalUser = new userdb({
-                fname, email, password, cpassword,profilephoto
+                fname, email, password, cpassword,resume
             });
 
             // here password hasing
@@ -135,8 +165,9 @@ router.get("/logout", authenticate, async (req, res) => {
 
 
 router.post("/dash", async (req, res) => {
-    const { fname , lname ,email, profilephoto } = req.body;
-    console.log(profilephoto)
+    const { fname , lname ,email,resume } = req.body;
+    console.log(fname);
+    console.log(resume);
 
     try {
         const userValid = await userdb.findOne({ email:email });
@@ -161,4 +192,45 @@ router.post("/dash", async (req, res) => {
 
 
 
+
+// @route POST /upload
+// @desc  Uploads file to DB
+// router.post('/upload', upload.single('file'), (req, res) => {
+//     // res.json({ file: req.file });
+//     res.redirect('/');
+//   });
+  
+//   // @route GET /files
+//   // @desc  Display all files in JSON
+//   router.get('/files', (req, res) => {
+//     gfs.files.find().toArray((err, files) => {
+//       // Check if files
+//       if (!files || files.length === 0) {
+//         return res.status(404).json({
+//           err: 'No files exist'
+//         });
+//       }
+  
+//       // Files exist
+//       return res.json(files);
+//     });
+//   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
+
+
+
+

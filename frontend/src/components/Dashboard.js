@@ -16,6 +16,14 @@ import Form4 from './assests/Form4';
 
 
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+
+
+
 
 const Dashboard = () => {
 
@@ -76,7 +84,7 @@ const Dashboard = () => {
         fname: "",
         lname: "",
         email: "",
-        profilephoto: "",
+        resume:"",
     })
 
 
@@ -95,9 +103,24 @@ const Dashboard = () => {
             lname: lname,
         }));
 
+        setActiveBox(<Form2 onGetData2={collectDataOfForm2} />);
 
     }
 
+
+    const collectDataOfForm2 = (data) => {
+
+        const resume = data;
+
+        setInputValues((prevInputValues) => ({
+
+            ...prevInputValues,
+            resume:resume,
+        }));
+
+        
+
+    }
 
     const collectDataOfForm4 = (data) => {
         const { profilephoto } = data;
@@ -112,38 +135,23 @@ const Dashboard = () => {
 
 
 
-    // console.log(inputValues)
-
-
-    // -------------- final submit btn function ------------------
-
-    // let token = localStorage.getItem("usersdatatoken")
+    console.log(inputValues)
 
 
 
 
-    // const createPost = async (newImg) => {
-
-
-    //     const data = await fetch("/dash", {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify({ newImg, token })
-    //     });
-
-    //     const res = await data.json();
-    //     console.log(res);
-    // }
+    //    /* *//* *//* *//* */  /*/* *//* *//* *//* *//*-------------- final submit btn function ------------------ *//* *//* *//* *//* *//* *//* *//* *//* *//* *//* *//* *//* *//* 
 
 
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     const imgString = JSON.stringify(inputValues.profilephoto).slice(17, -2)
-    //     createPost(imgString);
-    // }
+
+
+
+
+
+
+
+
 
 
     const createPost = async (inputValues) => {
@@ -160,9 +168,9 @@ const Dashboard = () => {
             const data = await response.json();
             // console.log(data);
 
-            setTimeout(() => {
-                window.location.reload();
-            }, 4000);
+            // setTimeout(() => {
+            //     window.location.reload();
+            // }, 4000);
             toast.success("Registration Successfully done 😃!", {
                 position: "top-center"
             });
@@ -199,8 +207,8 @@ const Dashboard = () => {
     const list = [
         { icon: <FaHome />, title: 'info', page: <Form1 /> },
         { icon: <FaUser />, title: 'academic', page: <Form2 /> },
-        { icon: <FaComment />, title: 'intership', page: <Form3 /> },
-        { icon: <FaCog />, title: 'doc', page: <Form4 /> },
+        // { icon: <FaComment />, title: 'intership', page: <Form3 /> },
+        // { icon: <FaCog />, title: 'doc', page: <Form4 /> },
     ];
 
     const dataBoxHandler = () => {
@@ -209,14 +217,14 @@ const Dashboard = () => {
                 setActiveBox(<Form1 onGetData={collectDataOfForm} />);
                 break;
             case 1:
-                setActiveBox(<Form2 />);
+                setActiveBox(<Form2 onGetData2={collectDataOfForm2} />);
                 break;
             case 2:
-                setActiveBox(<Form3 />);
-                break;
-            case 3:
-                setActiveBox(<Form4 onImageChange={collectDataOfForm4} />);
-                break;
+               setActiveBox(<Form3 />);
+             break;
+            // case 3:
+            // setActiveBox(<Form4 onImageChange={collectDataOfForm4} />);
+            // break;
             default:
                 setActiveBox(<Form1 />);
         }
@@ -231,7 +239,7 @@ const Dashboard = () => {
         setActiveIndex(index);
     };
 
-
+    console.log(activeIndex);
 
 
     return (
@@ -258,10 +266,13 @@ const Dashboard = () => {
                 <div className="form_container">
                     <span>{activeBox}</span>
                     {
-                        activeIndex === 3 ?
+                        activeIndex === 1 ?
                             <button style={{ position: 'relative', top: '90px' }} type="submit">Final Submit</button> : <></>
                     }
                 </div>
+
+
+
             </form>
         </div>
 
